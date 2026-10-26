@@ -45,6 +45,18 @@ function operate(num1, num2, operator)
     }
 }
 
+// BUG: need to fix logic: the operator will not always be 3 indexes backwards from the end index
+function containsOperator(string)
+{
+    let char = string.substring(string.length-3, string.length-1);
+    if (char == "+" || char == "-" || char == "/" || char == "*")
+    {
+        return true;
+    }
+    return false;
+}
+
+
 let display = document.querySelector(".display-text");
 let numbers = document.querySelectorAll(".number");
 let operators = document.querySelectorAll(".operator");
@@ -94,14 +106,28 @@ for (let i = 1; i < operators.length - 1; i++)
         if (display.textContent !== "Display")
         {
             operator = operators[i].textContent;
-            // if the number of operations is already 1 or greater, calculate and display the final answer first
-            // then move on to the next calculation
-            if (numOfOps >= 1){
-                finalAnswer();
+            let currentDisplay = display.textContent;
+            // if the same operator isn't the current operator in the display
+            if (!currentDisplay.includes(operator))
+            {
+                // if there is already a different operator in the display, replace the old one with the new one
+                // BUG: need to fix logic: the index where the operator is will not always be 3 indexes backwards
+                if (containsOperator(display.textContent))
+                {
+                    display.textContent = currentDisplay.substring(0, currentDisplay - 3) + operator;
+                }
+                else 
+                {
+                    num1 = currentDisplay;
+                    display.textContent += operator;
+                }
+                // if the number of operations is already 1 or greater, calculate and display the final answer first
+                // then move on to the next calculation
+                if (numOfOps >= 1){
+                    finalAnswer();
+                }
+                numOfOps++;
             }
-            numOfOps++;
-            num1 = display.textContent;
-            display.textContent += operators[i].textContent;
         }
     })
 }
