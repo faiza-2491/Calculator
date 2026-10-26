@@ -1,0 +1,107 @@
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.calculator
+{
+    background-color: rgb(226, 249, 249);
+    border-radius: 25px 25px 25px 25px;
+    height: 500px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+.display-container, .buttons-container, .number, .operator
+{
+    border-radius: 10px 10px 10px 10px;
+}
+
+.display-container
+{
+    background-color: rgba(212, 212, 212, 0.538);
+    padding: 10px;
+    height: 85px;
+    padding-bottom: 0px;
+}
+
+.display-container .display-text
+{
+    font-size: 30px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    
+    text-align: right;
+}
+
+
+
+.buttons-container
+{
+    
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.numbers-container
+{
+    flex-grow: 1;
+    width: 280px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.number
+{
+    width: 25%; 
+    height: 20%; 
+    background-color: rgba(188, 187, 187, 0.538);
+    font-size: 25px;
+    color:rgb(80, 80, 80);
+}
+
+.number, .operator
+{
+    border: none;
+    
+}
+
+.operator-container
+{
+    flex-grow: 10;
+    padding: 20px;
+    padding-left: 10px;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.operator
+{
+    height: 40px;
+    width: 75%;
+    background-color: rgba(157, 208, 220, 0.538);
+    font-size: 23px;
+}
+
+.operator#clear
+{
+    font-size: 20px;
+}
+
