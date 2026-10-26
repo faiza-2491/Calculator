@@ -19,13 +19,14 @@ function divide(num1, num2)
     {
         return "ERROR";
     }
-    return (num1) / (num);
+    return (num1) / (num2);
 }
 // calculate answer
 function operate(num1, num2, operator)
 {
     let n1 = parseFloat(num1);
     let n2 = parseFloat(num2);
+    console.log(n1);
 
     if (operator == " + ")
     {
@@ -44,15 +45,17 @@ function operate(num1, num2, operator)
         return divide(n1, n2)
     }
 }
-
-// BUG: need to fix logic: the operator will not always be 3 indexes backwards from the end index
-function containsOperator(string)
+// checks if the display contains another operator
+function containsOtherOperator(string)
 {
-    let char = string.substring(string.length-3, string.length-1);
-    if (char == "+" || char == "-" || char == "/" || char == "*")
+    // .length -2 becuase ooperator sits at 2 indexes before the length of the string
+    let char = string.substring(string.length-2, string.length-1);
+    if (char == "+" || char == "-" || char == "/" || char == "x")
     {
+        console.log("contains other operator: true");
         return true;
     }
+    console.log("contains other operator: false");
     return false;
 }
 
@@ -73,6 +76,9 @@ function finalAnswer()
     let totalOperation = display.textContent;
     // finds the index of the operator
     let indexOfOp = totalOperation.indexOf(operator);
+
+    // gets the first number
+    num1 = totalOperation.substring(0, indexOfOp);
     // gets the second number, 2 indexes after the operator
     num2 = totalOperation.substring(indexOfOp + 2, totalOperation.length);
     // displays the final answer
@@ -105,28 +111,30 @@ for (let i = 1; i < operators.length - 1; i++)
         // makes sure the user doesn't do an operations with no numbers
         if (display.textContent !== "Display")
         {
-            operator = operators[i].textContent;
             let currentDisplay = display.textContent;
-            // if the same operator isn't the current operator in the display
-            if (!currentDisplay.includes(operator))
+            let cdLength = currentDisplay.length;
+            // if the same operator isn't the current operator in the display or there is a number after the operator (checks if the last index is empty or has a number)
+            if (!currentDisplay.includes(operators[i].textContent) || (currentDisplay.substring(cdLength-1, cdLength) != " "))
             {
                 // if there is already a different operator in the display, replace the old one with the new one
-                // BUG: need to fix logic: the index where the operator is will not always be 3 indexes backwards
-                if (containsOperator(display.textContent))
+                if (containsOtherOperator(display.textContent))
                 {
-                    display.textContent = currentDisplay.substring(0, currentDisplay - 3) + operator;
+                    operator = operators[i].textContent;
+                    // .length - 3 because space before old operator sits 3 indexes before length of string
+                    // the substring is the number already entered
+                    display.textContent = currentDisplay.substring(0, cdLength - 3) + operator;
                 }
-                else 
+                else // if there isn't an operator in the display: just a number
                 {
-                    num1 = currentDisplay;
+                    // if the number of operations is already 1 or greater, calculate and display the final answer first, then move on to the next calculation
+                    if (numOfOps >= 1){
+                        finalAnswer();
+                    }
+                    operator = operators[i].textContent;
                     display.textContent += operator;
+                    numOfOps++;
                 }
-                // if the number of operations is already 1 or greater, calculate and display the final answer first
-                // then move on to the next calculation
-                if (numOfOps >= 1){
-                    finalAnswer();
-                }
-                numOfOps++;
+                hitEquals = false;
             }
         }
     })
@@ -139,6 +147,7 @@ clearBtn.addEventListener("click", () => {
     operator = "";
     num1 = "0";
     num2 = "0";
+    numOfOps = 0;
 })
 
 // when user hits =, display final answer and reset the number of ops to 0 and ste hitequals to true
