@@ -26,7 +26,8 @@ function operate(num1, num2, operator)
 {
     let n1 = parseFloat(num1);
     let n2 = parseFloat(num2);
-    console.log(n1);
+    console.log("Number1: " + n1);
+    console.log("Number2: " + n2);
 
     if (operator == " + ")
     {
@@ -165,7 +166,7 @@ clearBtn.addEventListener("click", () => {
 let equalBtn = document.getElementById("equals");
 equalBtn.addEventListener("click", () => {
     let currentDisplay = display.textContent;
-    // if user hits equals to early, reset data and revert to default display
+    // if user hits equals too early, reset data and revert to default display
     if (currentDisplay == "Display" || currentDisplay.substring(currentDisplay.length-1, currentDisplay.length) == " " || !containsOp(currentDisplay))
     {
         display.textContent = "Display";
@@ -181,3 +182,4 @@ equalBtn.addEventListener("click", () => {
     }
     numOfOps = 0;
 })
+
