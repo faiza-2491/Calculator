@@ -45,7 +45,17 @@ function operate(num1, num2, operator)
         return divide(n1, n2)
     }
 }
-// checks if the display contains another operator
+// checks if the display conatiner an operator with or without a number after it
+function containsOp(string)
+{
+    if (string.includes("+") || string.includes("/") || string.includes("-") || string.includes("x"))
+    {
+        return true;
+    }
+    return false;
+}
+
+// checks if the display contains another operator with no number after it
 function containsOtherOperator(string)
 {
     // .length -2 becuase ooperator sits at 2 indexes before the length of the string
@@ -64,9 +74,9 @@ let display = document.querySelector(".display-text");
 let numbers = document.querySelectorAll(".number");
 let operators = document.querySelectorAll(".operator");
 
-let num1;
-let num2;
-let operator;
+let num1 = "";
+let num2 = "";
+let operator = "";
 let hitEquals = false;
 
 // display final answer
@@ -83,6 +93,7 @@ function finalAnswer()
     num2 = totalOperation.substring(indexOfOp + 2, totalOperation.length);
     // displays the final answer
     display.textContent = operate(num1, num2, operator);
+    num2 = "";
 }
 
 // display for numbers
@@ -145,15 +156,28 @@ let clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", () => {
     display.textContent = "Display";
     operator = "";
-    num1 = "0";
-    num2 = "0";
+    num1 = "";
+    num2 = "";
     numOfOps = 0;
 })
 
 // when user hits =, display final answer and reset the number of ops to 0 and ste hitequals to true
 let equalBtn = document.getElementById("equals");
 equalBtn.addEventListener("click", () => {
-    finalAnswer();
+    let currentDisplay = display.textContent;
+    // if user hits equals to early, reset data and revert to default display
+    if (currentDisplay == "Display" || currentDisplay.substring(currentDisplay.length-1, currentDisplay.length) == " " || !containsOp(currentDisplay))
+    {
+        display.textContent = "Display";
+        operator = "";
+        num1 = "";
+        num2 = "";
+        hitEquals = false;
+    }
+    else
+    {
+        finalAnswer();
+        hitEquals = true;
+    }
     numOfOps = 0;
-    hitEquals = true;
 })
