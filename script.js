@@ -79,6 +79,9 @@ let num1 = "";
 let num2 = "";
 let operator = "";
 let hitEquals = false;
+// tracks how many operators the user has hit in consecutive calculations
+let numOfOps = 0;
+let numOfDec = 0;
 
 // display final answer
 function finalAnswer()
@@ -94,7 +97,27 @@ function finalAnswer()
     num2 = totalOperation.substring(indexOfOp + 2, totalOperation.length);
     // displays the final answer
     display.textContent = operate(num1, num2, operator);
+
+    if (display.textContent.includes("."))
+    {
+        numOfDec = 1;
+    }
+    else
+    {
+        numOfDec = 0;
+    }
     num2 = "";
+}
+
+// clears data
+function clear()
+{
+    operator = "";
+    num1 = "";
+    num2 = "";
+    numOfOps = 0;
+    numOfDec = 0;
+    hitEquals = false;
 }
 
 // display for numbers
@@ -114,8 +137,7 @@ for (let i = 0; i < 10; i++)
     })
 }
 
-// tracks how many operators the user has hit
-let numOfOps = 0;
+
 // display for operators
 for (let i = 1; i < operators.length - 1; i++)
 {
@@ -156,10 +178,7 @@ for (let i = 1; i < operators.length - 1; i++)
 let clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", () => {
     display.textContent = "Display";
-    operator = "";
-    num1 = "";
-    num2 = "";
-    numOfOps = 0;
+    clear();
 })
 
 // when user hits =, display final answer and reset the number of ops to 0 and ste hitequals to true
@@ -170,10 +189,7 @@ equalBtn.addEventListener("click", () => {
     if (currentDisplay == "Display" || currentDisplay.substring(currentDisplay.length-1, currentDisplay.length) == " " || !containsOp(currentDisplay))
     {
         display.textContent = "Display";
-        operator = "";
-        num1 = "";
-        num2 = "";
-        hitEquals = false;
+        clear();
     }
     else
     {
@@ -181,5 +197,63 @@ equalBtn.addEventListener("click", () => {
         hitEquals = true;
     }
     numOfOps = 0;
+});
+
+// backspace a number or operator
+let backBtn = document.getElementById("back");
+backBtn.addEventListener("click", () => {
+    let oldDisplay = display.textContent;
+    if (oldDisplay !== "Display"){
+
+        // if user is backspacing an operator, remove the 3 indexes the operator takes u
+        // and decrease the number of operators hits
+        if (oldDisplay.substring(oldDisplay.length-1, oldDisplay.length) == " ")
+        {
+            display.textContent = oldDisplay.slice(0, -3);
+            numOfOps--;
+        }
+        else if (oldDisplay.length == 1)
+        {
+            display.textContent = "Display";
+            clear();
+        }
+        else // if the user is backspacing a number
+        {
+            display.textContent = oldDisplay.slice(0, -1);
+            if(oldDisplay.substring(oldDisplay.length-1, oldDisplay.length) == ".")
+                numOfDec--;
+        }
+    }
+});
+
+
+let decBtn = document.getElementById("decimal");
+decBtn.addEventListener("click", () => {
+    let currentDisplay = display.textContent;
+    if (currentDisplay == "Display" || hitEquals == true)
+    {
+        display.textContent = ".";
+        numOfDec++;
+        hitEquals = false;
+    }
+    else if (numOfDec == 0)
+    {
+        display.textContent += ".";
+        numOfDec++;
+    }
+    else if (numOfDec == 1)
+    {
+        // if the display contains an operator
+        if (containsOp(currentDisplay))
+        {
+            // if the first number has a decimal
+            if (currentDisplay.substring(0, currentDisplay.indexOf(operator)).includes("."))
+            {
+                display.textContent += ".";
+                numOfDec++;
+            }
+        }
+    }
 })
+
 
